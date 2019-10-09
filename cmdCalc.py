@@ -39,9 +39,29 @@ class Menu:
 
 # </editor-fold>
 
-# <editor-fold desc="Чужие меню">
-
 # <editor-fold desc="Калькулятор чисел (menu_numbers)">
+
+# TODO подсказки для ввода
+def logic_op(): # old: calc_logic
+    n = int(input())
+    result = 0
+
+    if n == 1:
+        first = int(input("Введите первое значение:\n"))
+        second = int(input("Введите второе значение:\n"))
+        result = first and second
+    elif n == 2:
+        first = int(input("Введите первое значение:\n"))
+        second = int(input("Введите второе значение:\n"))
+        result = first or second
+    elif n == 3:
+        first = int(input("Введите значение:\n"))
+        result = not first
+    else:
+        print("Введено ошибочное значение")
+
+    if 1 <= n <= 3:
+        print(bool(result))
 
 def calc_extended():
     print('1. Возведение в степень')
@@ -69,7 +89,6 @@ def calc_extended():
         print(a ** 0.5)
     continue_calc()
 
-
 def check_brackets():
     print('Введите строку с формулой:')
     data = input()
@@ -86,8 +105,6 @@ def check_brackets():
         print('ДА')
     else:
         print('НЕТ')
-    continue_calc()
-
 
 def menu_numbers():
     print("1. Простые операции")
@@ -116,16 +133,136 @@ def menu_numbers():
     elif ch == 4:
         not_supported_menu('trigon_rad')
     elif ch == 5:
-        not_supported_menu('logical_op')
+        logic_op()
     elif ch == 6:
         not_supported_menu('dec2other')
     elif ch == 7:
         check_brackets()
-    elif ch == 8:
+
+    if ch == 8:
         main()
+    else:
+        continue_calc()
 
 
 # </editor-fold>
+
+# <editor-fold desc="Длинная арифметика (menu_long)">
+
+def menu_long(): # old: menu_long_simple
+    lol = 0
+
+    while lol < 1:
+        print("1. Сложение, вычитание")
+        print("2. Умножение")
+        print("3. Вернуться в главное меню") # added by Petr
+
+        i = int(input())
+        if i == 1:
+            long_simple()
+            lol += 1
+        elif i == 2:
+            print("Введите первое число:")
+            a = int(input())
+            print("Введите второе число:")
+            b = int(input())
+            print(a * b)
+            lol += 1
+        elif i == 3:
+            main() # added by...
+        else:
+            print("Такого пункта меню нет! Введите число от 1 до 3")
+
+
+def comp(a, b):
+    flag = 0
+    if len(a) > len(b):
+        flag = 1
+    elif len(a) < len(b):
+        flag = 2
+    else:
+        for i in range(len(a)):
+            if a[len(a) - i - 1] < b[len(a) - i - 1]:
+                flag = 2
+                break
+            elif a[len(a) - i - 1] > b[len(a) - i - 1]:
+                flag = 1
+                break
+    return flag
+
+
+def long_simple():
+    print('Введите первое число:')
+    a = input()
+    print('Введите второе число:')
+    b = input()
+    print('Введите операцию:')
+    oper = input()
+    first = list()
+    second = list()
+    for i in range(len(a)):
+        first.append(int(a[len(a) - i - 1]))
+    for i in range(len(b)):
+        second.append(int(b[len(b) - i - 1]))
+
+    while len(first) > 1 and first[-1] == 0:
+        first.pop()
+
+    while len(second) > 1 and second[-1] == 0:
+        second.pop()
+    carry = 0
+    result = list()
+    if oper == '+':
+        result = first[:]
+        i = 0
+        while i < max(len(result), len(second)) or carry:
+            if i == len(result):
+                result.append(0)
+            tmp = 0
+            if i < len(second):
+                tmp = second[i]
+            result[i] += carry + tmp
+            if result[i] >= 10:
+                carry = 1
+            else:
+                carry = 0
+            if carry:
+                result[i] -= 10
+            i += 1
+    elif oper == '-':
+        if comp(first, second) == 1 or comp(first, second) == 0:
+            result = first[:]
+            n = len(first) - len(second)
+            zer = [0] * n
+            second.extend(zer)
+            for i in range(len(result)):
+                result[i] -= second[i]
+                if result[i] < 0:
+                    result[i] += 10
+                    if i < len(result) - 1:
+                        result[i + 1] -= 1
+            while len(result) > 1 and result[-1] == 0:
+                result.pop()
+
+        elif comp(first, second) == 2:
+            result = second[:]
+            n = len(second) - len(first)
+            zer = [0] * n
+            first.extend(zer)
+            for i in range(len(result)):
+                result[i] -= first[i]
+                if result[i] < 0:
+                    result[i] += 10
+                    if i < len(result) - 1:
+                        result[i + 1] -= 1;
+
+            while len(result) > 1 and result[-1] == 0:
+                result.pop()
+            result.append('-')
+
+    ans = [str(item) for item in result]
+    ans = "".join(ans)
+    print(ans[::-1])
 
 # </editor-fold>
 
@@ -133,6 +270,7 @@ def continue_calc(msg: str = ""):
     if msg != "":
         print("Ошибка: " + str(msg))
     print("Продолжить считать? [1/0]")
+    ch = -1
     try:
         ch = int(input())
     except ValueError:
@@ -150,7 +288,7 @@ def not_supported_menu(name: str = ""):
 def main():
     num_calc_menu_item = MenuItem("Калькулятор чисел", menu_numbers)
     string_calc_menu_item = MenuItem("Калькулятор строк", not_supported_menu)
-    long_calc_menu_item = MenuItem("Длинная арифметика", not_supported_menu)
+    long_calc_menu_item = MenuItem("Длинная арифметика", menu_long)
 
     main_menu = Menu(num_calc_menu_item, string_calc_menu_item, long_calc_menu_item)
     main_menu.show()
