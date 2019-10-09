@@ -173,6 +173,8 @@ def menu_long(): # old: menu_long_simple
         else:
             print("Такого пункта меню нет! Введите число от 1 до 3")
 
+    continue_calc()
+
 
 def comp(a, b):
     flag = 0
