@@ -1,3 +1,4 @@
+
 # <editor-fold desc="Классы для меню">
 
 class MenuItem:
@@ -106,7 +107,78 @@ def check_brackets():
         print('ДА')
     else:
         print('НЕТ')
+def dec2other():
+    lol=0
+    while (lol<1):
+        print("1.перевод 10СИ -> 2СИ")
 
+        print("2.перевод 10СИ -> 16СИ")
+
+        print("3.перевод 10СИ -> 8СИ")
+
+
+        try:
+            choice=int(input())
+        except ValueError:
+            print("надо ввести цифру 1 или 2 или 3")
+            dec2other()
+        if(choice==1):
+            calc_10_2()
+            lol += 1
+        elif(choice==2):
+            calc_10_16()
+            lol += 1
+        elif(choice==3):
+            calc_10_8()
+            lol += 1
+        else:
+            print("надо ввести цифру 1 или 2 или 3")
+def calc_10_8():
+    print("Введите число:")
+    num = int(input())
+    eight = list()
+    i = 0
+    while not num == 0:
+        eight.append(num%8)
+        num = num//8
+        i += 1
+    i = 0
+    eight.reverse()
+    s1 = list()
+    for item in eight:
+        s1.append(str(item))
+    gg = "".join(s1)
+    print(gg)
+def calc_10_2():
+    print("Введите число:")
+    num = int(input())
+    two = list()
+    i = 0
+    while not num == 0:
+        two.append(num%2)
+        num = num//2
+        i += 1
+    i = 0
+    two.reverse()
+    s1 = list()
+    for item in two:
+        s1.append(str(item))
+    gg = "".join(s1)
+    print(gg)
+def calc_10_16():
+    print("Введите число:")
+    n=int(input())
+    alphabet = "0123456789ABCDEF"
+    l = list()
+    while n > 0 :
+        l.append(alphabet[n % 16])
+        n //= 16
+    l.reverse()
+    l2=list()
+    for i in l:
+        l2.append(str(i))
+    lul="".join(l2)
+    print(lul)
 def menu_numbers():
     print("1. Простые операции")
     print("2. Расширенные операции")
@@ -136,7 +208,7 @@ def menu_numbers():
     elif ch == 5:
         logic_op()
     elif ch == 6:
-        not_supported_menu('dec2other')
+        dec2other()
     elif ch == 7:
         check_brackets()
 
@@ -313,7 +385,6 @@ def main():
     num_calc_menu_item = MenuItem("Калькулятор чисел", menu_numbers)
     string_calc_menu_item = MenuItem("Калькулятор строк", not_supported_menu)
     long_calc_menu_item = MenuItem("Длинная арифметика", menu_long)
-
     main_menu = Menu(num_calc_menu_item, string_calc_menu_item, long_calc_menu_item)
     main_menu.show()
 
