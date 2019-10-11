@@ -41,6 +41,7 @@ class Menu:
 
 # <editor-fold desc="Калькулятор чисел (menu_numbers)">
 
+
 # TODO подсказки для ввода
 def logic_op(): # old: calc_logic
     n = int(input())
@@ -265,6 +266,27 @@ def long_simple():
     ans = [str(item) for item in result]
     ans = "".join(ans)
     print(ans[::-1])
+
+# </editor-fold>
+
+# <editor-fold desc="Калькулятор строк">
+
+def str_showcenter():
+    print("Введите строку: ")
+
+    stroka = str(input())
+    dlina_stroki = len(stroka)
+    promezh = ' '
+    otstup = (80 - dlina_stroki) // 2
+    if dlina_stroki % 2 == 0:
+        po_gorizontali = promezh * otstup + stroka + otstup * promezh
+    else:
+        po_gorizontali = promezh * (otstup + 1) + stroka + otstup * promezh
+    for i in range(12):
+        print(promezh * 80)
+    print(po_gorizontali)
+    for y in range(12):
+        print(promezh * 80)
 
 # </editor-fold>
 
